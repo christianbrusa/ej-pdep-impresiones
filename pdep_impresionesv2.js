@@ -1,3 +1,67 @@
+class Impresora {
+
+    pesoTotalCola(impresora) {
+        let total = 0;
+
+        impresora.cola.forEach(function(documento) {
+            total += documento.peso();
+        })
+        return total;
+    }
+}
+
+class ImpresoraGeneral extends Impresora {
+
+    constructor(cargaMaxima, cola) {
+        super();
+        this.cargaMaxima = cargaMaxima;
+        this.cola = cola;
+    }
+
+    puedeImprimir(documento) {
+        if (documento instanceof ArchivoDeImagen || documento instanceof Libro) {
+            return documento.peso() < this.cargaMaxima;
+        } else {
+            console.log("No puedo imprimir este tipo de archivo");
+        }
+    }
+}
+
+class ImpresoraFotos extends Impresora {
+
+    constructor(cargaMaxima, cola) {
+        super();
+        this.cargaMaxima = cargaMaxima;
+        this.cola = cola;
+    }
+
+    puedeImprimir(documento) {
+        if (documento instanceof ArchivoDeImagen) {
+            console.log("imprimiendo...");
+            return documento.peso() < this.cargaMaxima;
+        } else {
+            console.log("No puedo imprimir este tipo de archivo");
+        }
+    }
+}
+
+class ImpresoraLibros extends Impresora {
+
+    constructor(cargaMaxima, cola) {
+        super();
+        this.cargaMaxima = cargaMaxima;
+        this.cola = cola;
+    }
+
+    puedeImprimir(documento) {
+        if (documento instanceof ArchivoDeImagen) {
+            return documento.peso() < this.cargaMaxima;
+        } else {
+            console.log("No puedo imprimir este tipo de archivo");
+        }
+    }
+}
+
 class Documento {
 
     peso() {
@@ -43,3 +107,8 @@ doc1.peso();
 
 const doc2 = new ArchivoDeImagen(99);
 doc2.peso();
+
+const imp1 = new ImpresoraFotos(50, [doc1, doc2]);
+const imp2 = new ImpresoraLibros(100, []);
+
+imp1.puedeImprimir(doc2);
