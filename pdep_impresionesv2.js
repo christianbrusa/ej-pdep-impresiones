@@ -1,3 +1,15 @@
+class Servidor {
+
+    constructor(listadoDeImpresoras) {
+        this.listadoDeImpresoras = listadoDeImpresoras;
+    }
+
+    puedeAceptar(documento) {
+        return this.listadoDeImpresoras.some(impresora => impresora.constructor.name == "ImpresoraFotos" && documento.constructor.name == "ArchivoDeImagen" ||
+            impresora.constructor.name == "ImpresoraLibros" && documento.constructor.name == "Libro");
+    }
+}
+
 class Impresora {
 
     pesoTotalCola(impresora) {
@@ -112,3 +124,9 @@ const imp1 = new ImpresoraFotos(50, [doc1, doc2]);
 const imp2 = new ImpresoraLibros(100, []);
 
 imp1.puedeImprimir(doc2);
+
+const servidorPalermo = new Servidor([imp1]);
+const servidorChacarita = new Servidor([imp2]);
+
+servidorPalermo.puedeAceptar(doc1);
+servidorPalermo.puedeAceptar(doc2);
