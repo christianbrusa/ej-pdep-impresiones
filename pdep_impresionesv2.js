@@ -1,3 +1,43 @@
+class Usuario {
+
+    pedidoDeImpresion(documento) {
+
+    }
+
+}
+
+
+class Administrador extends Usuario {
+
+    constructor(listadoDeServidores) {
+        super();
+        this.listadoDeServidores = listadoDeServidores;
+    }
+
+    pedidoDeImpresion(documento) {
+        let estaDisponible = (servidor) => servidor.puedeAceptar(documento);
+        let servidoresDisponibles = this.listadoDeServidores.filter(estaDisponible);
+        //console.log(servidoresDisponibles);
+        return servidoresDisponibles[0].listadoDeImpresoras[0].puedeImprimir(documento);
+    }
+}
+
+
+class Comun extends Usuario {
+
+    constructor(listadoDeServidores) {
+        super();
+        this.listadoDeServidores = listadoDeServidores;
+    }
+
+    pedidoDeImpresion(documento) {
+        let estaDisponible = (servidor) => servidor.puedeAceptar(documento);
+        let servidoresDisponibles = this.listadoDeServidores.filter(estaDisponible);
+        //console.log(servidoresDisponibles);
+        return servidoresDisponibles[0].listadoDeImpresoras[0].puedeImprimir(documento);
+    }
+}
+
 class Servidor {
 
     constructor(listadoDeImpresoras) {
@@ -130,3 +170,6 @@ const servidorChacarita = new Servidor([imp2]);
 
 servidorPalermo.puedeAceptar(doc1);
 servidorPalermo.puedeAceptar(doc2);
+
+const pepe = new Administrador([servidorPalermo, servidorChacarita]);
+pepe.pedidoDeImpresion(doc1);
