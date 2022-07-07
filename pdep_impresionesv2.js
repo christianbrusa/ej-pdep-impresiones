@@ -72,7 +72,13 @@ class ImpresoraGeneral extends Impresora {
 
     puedeImprimir(documento) {
         if (documento instanceof ArchivoDeImagen || documento instanceof Libro) {
-            return documento.peso() < this.cargaMaxima;
+            if ((documento.peso() + this.pesoTotalCola(this)) < this.cargaMaxima) {
+                console.log("imprimiendo...");
+                return true;
+            } else {
+                console.log("No puede imprimir ya que su peso sobrepasa la carga maxima");
+                return false;
+            }
         } else {
             console.log("No puedo imprimir este tipo de archivo");
         }
@@ -89,8 +95,13 @@ class ImpresoraFotos extends Impresora {
 
     puedeImprimir(documento) {
         if (documento instanceof ArchivoDeImagen) {
-            console.log("imprimiendo...");
-            return documento.peso() < this.cargaMaxima;
+            if ((documento.peso() + this.pesoTotalCola(this)) < this.cargaMaxima) {
+                console.log("imprimiendo...");
+                return true;
+            } else {
+                console.log("No puede imprimir ya que su peso sobrepasa la carga maxima");
+                return false;
+            }
         } else {
             console.log("No puedo imprimir este tipo de archivo");
         }
@@ -106,8 +117,14 @@ class ImpresoraLibros extends Impresora {
     }
 
     puedeImprimir(documento) {
-        if (documento instanceof ArchivoDeImagen) {
-            return documento.peso() < this.cargaMaxima;
+        if (documento instanceof Libro) {
+            if ((documento.peso() + this.pesoTotalCola(this)) < this.cargaMaxima) {
+                console.log("imprimiendo...");
+                return true;
+            } else {
+                console.log("No puede imprimir ya que su peso sobrepasa la carga maxima");
+                return false;
+            }
         } else {
             console.log("No puedo imprimir este tipo de archivo");
         }
@@ -163,7 +180,7 @@ doc2.peso();
 const imp1 = new ImpresoraFotos(50, [doc1, doc2]);
 const imp2 = new ImpresoraLibros(100, []);
 
-imp1.puedeImprimir(doc2);
+//imp1.puedeImprimir(doc2);
 
 const servidorPalermo = new Servidor([imp1]);
 const servidorChacarita = new Servidor([imp2]);
@@ -172,4 +189,4 @@ servidorPalermo.puedeAceptar(doc1);
 servidorPalermo.puedeAceptar(doc2);
 
 const pepe = new Administrador([servidorPalermo, servidorChacarita]);
-pepe.pedidoDeImpresion(doc1);
+pepe.pedidoDeImpresion(doc2);
