@@ -1,6 +1,16 @@
+let _ = require('lodash');
+
 class Usuario {
 
     pedidoDeImpresion(documento) {
+
+    }
+
+    servidorSeleccionado(servidoresDisponibles) {
+
+    }
+
+    imprimir(servidor) {
 
     }
 
@@ -33,8 +43,20 @@ class Comun extends Usuario {
     pedidoDeImpresion(documento) {
         let estaDisponible = (servidor) => servidor.puedeAceptar(documento);
         let servidoresDisponibles = this.listadoDeServidores.filter(estaDisponible);
-        //console.log(servidoresDisponibles);
-        return servidoresDisponibles[0].listadoDeImpresoras[0].puedeImprimir(documento);
+        return servidoresDisponibles;
+    }
+
+    servidorSeleccionado(servidoresDisponibles) {
+        return _.sample(servidoresDisponibles);
+    }
+
+    imprimir(documento) {
+        if (!this.servidorSeleccionado(this.pedidoDeImpresion(documento))) {
+            console.log("No hay servidores disponibles para imprimir este tipo de archivo");
+            return null;
+        }
+        let servidor = this.servidorSeleccionado(this.pedidoDeImpresion(documento));
+        return servidor.listadoDeImpresoras[0].puedeImprimir(documento);
     }
 }
 
@@ -184,9 +206,11 @@ const imp2 = new ImpresoraLibros(100, []);
 
 const servidorPalermo = new Servidor([imp1]);
 const servidorChacarita = new Servidor([imp2]);
+const servidorNunez = new Servidor([imp1]);
+const servidorUrquiza = new Servidor([imp1]);
 
 servidorPalermo.puedeAceptar(doc1);
 servidorPalermo.puedeAceptar(doc2);
 
-const pepe = new Administrador([servidorPalermo, servidorChacarita]);
-pepe.pedidoDeImpresion(doc2);
+const pepe = new Comun([servidorPalermo, servidorChacarita]);
+pepe.imprimir(doc2);
