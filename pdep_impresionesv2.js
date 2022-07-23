@@ -1,5 +1,3 @@
-process.stdin.setEncoding('utf8');
-
 class Usuario {
 
     pedidoDeImpresion(documento) {
@@ -19,15 +17,8 @@ class Administrador extends Usuario {
     pedidoDeImpresion(documento) {
         let estaDisponible = (servidor) => servidor.puedeAceptar(documento);
         let servidoresDisponibles = this.listadoDeServidores.filter(estaDisponible);
-        servidoresDisponibles.map(function(servidor) {
-            console.log("Servidor: " + servidoresDisponibles.indexOf(servidor));
-        })
-        console.log("Cual de estos servidores desea usar?");
-        process.stdin.on('data', function(data) {
-            console.log("Servidor elegido: " + data);
-            servidoresDisponibles[Number(data)].listadoDeImpresoras[0].puedeImprimir(documento);
-            process.exit();
-        })
+        //console.log(servidoresDisponibles);
+        return servidoresDisponibles[0].listadoDeImpresoras[0].puedeImprimir(documento);
     }
 }
 
@@ -42,16 +33,8 @@ class Comun extends Usuario {
     pedidoDeImpresion(documento) {
         let estaDisponible = (servidor) => servidor.puedeAceptar(documento);
         let servidoresDisponibles = this.listadoDeServidores.filter(estaDisponible);
-        console.log(servidoresDisponibles);
-        console.log("Digite '1' si desea confirmar la acción o '0' para salir del programa");
-        process.stdin.on('data', function(data) {
-            if (data == 1) {
-                servidoresDisponibles[0].listadoDeImpresoras[0].puedeImprimir(documento);
-                process.exit();
-            } else if (data == 0) {
-                process.exit();
-            }
-        })
+        //console.log(servidoresDisponibles);
+        return servidoresDisponibles[0].listadoDeImpresoras[0].puedeImprimir(documento);
     }
 }
 
@@ -189,10 +172,10 @@ class ArchivoDeImagen extends Documento {
 }
 
 const doc1 = new Libro(20);
-//doc1.peso();
+doc1.peso();
 
 const doc2 = new ArchivoDeImagen(99);
-//doc2.peso();
+doc2.peso();
 
 const imp1 = new ImpresoraFotos(50, [doc1, doc2]);
 const imp2 = new ImpresoraLibros(100, []);
@@ -201,12 +184,9 @@ const imp2 = new ImpresoraLibros(100, []);
 
 const servidorPalermo = new Servidor([imp1]);
 const servidorChacarita = new Servidor([imp2]);
-const servidorNunez = new Servidor([imp1]);
-const servidorUrquiza = new Servidor([imp1]);
 
+servidorPalermo.puedeAceptar(doc1);
+servidorPalermo.puedeAceptar(doc2);
 
-//servidorPalermo.puedeAceptar(doc1);
-//servidorPalermo.puedeAceptar(doc2);
-
-const pepe = new Administrador([servidorPalermo, servidorChacarita, servidorNunez, servidorUrquiza]);
+const pepe = new Administrador([servidorPalermo, servidorChacarita]);
 pepe.pedidoDeImpresion(doc2);
